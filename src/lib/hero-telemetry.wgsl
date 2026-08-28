@@ -10,24 +10,6 @@ fn sdBox(p: vec2f, b: vec2f) -> f32 {
   return length(max(d, vec2f(0.0))) + min(max(d.x, d.y), 0.0);
 }
 
-fn sdRoundedBox(p: vec2f, b: vec2f, r: f32) -> f32 {
-  return sdBox(p, max(b - vec2f(r), vec2f(0.0))) - r;
-}
-
-fn sdEllipse(p: vec2f, ab: vec2f) -> f32 {
-  return (length(p / ab) - 1.0) * min(ab.x, ab.y);
-}
-
-fn opSmoothUnion(d1: f32, d2: f32, k: f32) -> f32 {
-  let h = clamp(0.5 + 0.5 * (d2 - d1) / k, 0.0, 1.0);
-  return mix(d2, d1, h) - k * h * (1.0 - h);
-}
-
-fn opSmoothSub(d1: f32, d2: f32, k: f32) -> f32 {
-  let h = clamp(0.5 - 0.5 * (d2 + d1) / k, 0.0, 1.0);
-  return mix(d1, -d2, h) + k * h * (1.0 - h);
-}
-
 fn rotate(p: vec2f, a: f32) -> vec2f {
   let c = cos(a);
   let s = sin(a);
@@ -38,36 +20,31 @@ fn hash21(p: vec2f) -> f32 {
   return fract(sin(dot(p, vec2f(127.1, 311.7))) * 43758.5453);
 }
 
-fn datadogMark(p: vec2f) -> f32 {
-  let q = rotate(p, -0.14);
-  let plate = sdRoundedBox(q, vec2f(0.20, 0.20), 0.055);
-  let head = sdEllipse(q - vec2f(0.0, -0.01), vec2f(0.105, 0.125));
-  let ear = sdEllipse(rotate(q - vec2f(-0.07, -0.10), 0.5), vec2f(0.055, 0.085));
-  let snout = sdEllipse(q - vec2f(0.10, 0.04), vec2f(0.08, 0.055));
-  let body = opSmoothUnion(opSmoothUnion(head, ear, 0.03), snout, 0.04);
-  var mark = opSmoothSub(plate, body, 0.012);
-  let screen = sdRoundedBox(q - vec2f(0.07, 0.11), vec2f(0.075, 0.055), 0.01);
-  let bezel = sdRoundedBox(q - vec2f(0.07, 0.11), vec2f(0.088, 0.068), 0.014);
-  mark = opSmoothUnion(mark, bezel, 0.01);
-  mark = opSmoothSub(mark, screen, 0.008);
-  return mark;
+fn angularShard(p: vec2f, t: f32) -> f32 {
+  var acc = 1.0;
+  for (var i = 0; i < 6; i = i + 1) {
+    let fi = f32(i);
+    let q = rotate(p - vec2f(0.42, -0.08), 0.38 + fi * 0.52 + t * 0.045);
+    let blade = sdBox(q, vec2f(0.62, 0.008 + fi * 0.003));
+    acc = min(acc, blade);
+  }
+  let wedge = sdBox(rotate(p - vec2f(0.38, -0.02), -0.72 + t * 0.02), vec2f(0.18, 0.18));
+  return min(acc, wedge);
 }
 
-fn ribbons(p: vec2f, t: f32) -> f32 {
+fn signalField(p: vec2f, t: f32) -> f32 {
   var acc = 0.0;
   for (var i = 0; i < 5; i = i + 1) {
     let fi = f32(i);
-    let y0 = -0.30 + fi * 0.135;
-    let amp = 0.032 + fi * 0.007;
-    let freq = 5.4 + fi * 1.65;
-    let speed = 0.28 + fi * 0.09;
-    let y = y0 + amp * sin(p.x * freq + t * speed + fi * 1.1);
-    let d = abs(p.y - y);
-    acc += (1.0 - smoothstep(0.0, 0.0032, d)) * (0.28 - fi * 0.03);
-    let tick = abs(fract(p.x * 2.6 + t * 0.07 + fi * 0.18) - 0.5);
-    acc += (1.0 - smoothstep(0.0, 0.0018, abs(d - 0.014)))
-      * (1.0 - smoothstep(0.45, 0.5, tick))
-      * 0.09;
+    let q = rotate(p, 0.55 + fi * 0.21);
+    let y0 = -0.28 + fi * 0.12;
+    let y = y0 + 0.018 * sin(q.x * 7.2 + t * (0.22 + fi * 0.07) + fi);
+    let d = abs(q.y - y);
+    acc += (1.0 - smoothstep(0.0, 0.0034, d)) * (0.26 - fi * 0.03);
+    let tick = abs(fract(q.x * 2.4 + t * 0.08 + fi * 0.16) - 0.5);
+    acc += (1.0 - smoothstep(0.0, 0.0018, abs(d - 0.016)))
+      * (1.0 - smoothstep(0.44, 0.5, tick))
+      * 0.08;
   }
   return acc;
 }
@@ -78,24 +55,22 @@ fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
   let p = (uv - vec2f(0.5)) * vec2f(aspect, 1.0);
   let t = params.time;
 
-  let breathe = 1.0 + 0.02 * sin(t * 0.85);
-  let dogP = (p - vec2f(0.46, -0.12)) / breathe;
-  let dDog = datadogMark(dogP);
-  let fill = 1.0 - smoothstep(-0.0015, 0.004, dDog);
-  let line = 1.0 - smoothstep(0.0, 0.0055, abs(dDog));
-  let glow = exp(-max(dDog, 0.0) * 16.0);
+  let dShard = angularShard(p, t);
+  let fill = 1.0 - smoothstep(-0.0015, 0.006, dShard);
+  let line = 1.0 - smoothstep(0.0, 0.0055, abs(dShard));
+  let glow = exp(-max(dShard, 0.0) * 14.0);
 
-  let traces = ribbons(p, t);
-  let cell = floor(uv * vec2f(32.0, 18.0));
+  let traces = signalField(p, t);
+  let cell = floor(uv * vec2f(36.0, 20.0));
   let h = hash21(cell);
-  let spark = step(0.972, h) * (0.45 + 0.55 * sin(t * 1.8 + h * 40.0));
+  let spark = step(0.968, h) * (0.4 + 0.6 * sin(t * 1.7 + h * 36.0));
 
-  let purple = vec3f(0.388235, 0.172549, 0.650980);
-  let paper = vec3f(0.960784, 0.945098, 0.909804);
-  let leftClear = smoothstep(0.34, 0.62, uv.x);
-  var a = fill * 0.08 + line * 0.28 + glow * 0.08 + traces * 0.32 + spark * 0.06;
-  a *= 0.55 * leftClear;
-  a = clamp(a, 0.0, 0.34);
-  let col = mix(purple, paper, spark * 0.45 + line * 0.05);
+  let flash = vec3f(0.784313, 0.941176, 0.290196);
+  let ink = vec3f(0.066667, 0.066667, 0.066667);
+  let leftClear = smoothstep(0.28, 0.64, uv.x);
+  var a = fill * 0.10 + line * 0.34 + glow * 0.10 + traces * 0.30 + spark * 0.07;
+  a *= 0.62 * leftClear;
+  a = clamp(a, 0.0, 0.38);
+  let col = mix(flash, ink, spark * 0.25 + line * 0.08);
   return vec4f(col * a, a);
 }

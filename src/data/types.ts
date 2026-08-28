@@ -57,7 +57,7 @@ export type StoryVisual =
       kind: "live-transcript";
       timestamp: string;
       speaker: string;
-      quote: string;
+      note: string;
       signals: string[];
     }
   | {
@@ -248,13 +248,4 @@ export type CroJob = {
   outcome: string;
   clips: ClipId[];
   demo: DemoThread;
-};
-
-export type Quote = {
-  name: string;
-  handle: string;
-  date: string;
-  avatar: string;
-  quote: string;
-  source: string;
 };

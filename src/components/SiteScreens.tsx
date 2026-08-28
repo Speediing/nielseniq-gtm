@@ -132,29 +132,31 @@ function GranolaScreen({ account }: { account: string }) {
         <strong>Granola</strong>
         <span>Live · last 20 min</span>
       </header>
-      <p className="site-time">Still on the call · Granola in</p>
+      <p className="site-time">Still on the {account} call · Granola in</p>
       <ul>
         <li>
-          <span>14:12</span> Start with APM + Logs in one team. Not a product
-          tour.
+          <span>14:12</span> Start with one comparison in the category team.
+          Not a product tour.
         </li>
         <li>
           <span>14:18</span> Security: SSO and an audit trail before any extra
           products.
         </li>
         <li>
-          <span>14:21</span> Soft yes on a Bits AI trial if those two are named.
+          <span>14:21</span> Soft yes on a one-team trial if those two are
+          named.
         </li>
         <li>
-          <span>14:24</span> Cost mentioned once. RUM not in the room.
+          <span>14:24</span> Cost mentioned once. Second workstream not in
+          the room.
         </li>
         <li>
           <span>14:28</span> Your contact will take a Tuesday with a security
           co-owner.
         </li>
         <li>
-          <span>14:31</span> Use cases named live on the demo. Sev-2 story,
-          one team, SSO as the gate.
+          <span>14:31</span> Open question named live. Category review, one
+          team, SSO as the gate.
         </li>
       </ul>
     </div>
@@ -227,7 +229,7 @@ function GongScreen({ account }: { account: string }) {
       <div className="gong-recap">
         <h4>Call recap</h4>
         <ul>
-          <li>They have APM + Logs</li>
+          <li>They still build the review in three files</li>
           <li>Security lead in the room</li>
           <li>Cost mentioned once</li>
           <li>No one who can sign was on the call</li>
@@ -252,7 +254,7 @@ function SfdcAccountScreen({ account }: { account: string }) {
       <dl className="sfdc-fields">
         <div>
           <dt>Has now</dt>
-          <dd>APM + Logs</dd>
+          <dd>Spreadsheet review</dd>
         </div>
         <div>
           <dt>Security lead</dt>
@@ -271,30 +273,30 @@ function SfdcAccountScreen({ account }: { account: string }) {
         <caption>Next 90 days</caption>
         <thead>
           <tr>
-            <th>Product</th>
+            <th>Motion</th>
             <th>Owner</th>
             <th>Window</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Bits AI</td>
-            <td>Platform eng manager</td>
+            <td>One-team trial</td>
+            <td>Category lead</td>
             <td>Day 15 to 45</td>
           </tr>
           <tr>
-            <td>Cloud SIEM</td>
+            <td>SSO path</td>
             <td>Security lead</td>
             <td>Day 15 to 45</td>
           </tr>
           <tr>
             <td>Cost</td>
-            <td>FinOps alias</td>
+            <td>Finance alias</td>
             <td>Day 45 to 90</td>
           </tr>
           <tr>
-            <td>RUM</td>
-            <td>Frontend guild</td>
+            <td>Second team</td>
+            <td>Ops partner</td>
             <td>Day 45 to 90</td>
           </tr>
         </tbody>
@@ -320,7 +322,7 @@ function SfdcOppScreen({
       <div className="sfdc-title">
         <p>Opportunity</p>
         <h3>
-          {account} · $1.4M
+          {account} · sample opp
         </h3>
       </div>
       <dl className="sfdc-fields">
@@ -341,7 +343,7 @@ function SfdcOppScreen({
           <dd>Likes us · weak map</dd>
         </div>
         <div className={highlight ? "gap" : undefined}>
-          <dt>Cloud SIEM</dt>
+          <dt>Second team</dt>
           <dd>Not in the story</dd>
         </div>
       </dl>
@@ -360,11 +362,11 @@ function SheetsScreen({
   const rows = table
     ? table.rows
     : [
-        [account, "Inside contact", "Signer TBD", "APM + Logs", "Tue SIEM"],
-        ["Globex", "VP Eng", "CISO", "APM + Logs", "First meeting"],
-        ["Initech", "SRE lead", "CTO", "APM + Logs", "Bits AI"],
-        ["Umbrella", "Sec eng", "CISO", "APM + Logs", "Open source drill"],
-        ["Hooli", "Platform", "Signer TBD", "APM + Logs", "Cost later"],
+        [account, "Inside contact", "Signer TBD", "One team", "Tue SSO"],
+        ["Globex", "Category", "Signer TBD", "One team", "First meeting"],
+        ["Initech", "Ops lead", "Legal", "One team", "Trial"],
+        ["Umbrella", "Sec eng", "CISO", "One team", "Access path"],
+        ["Hooli", "Ops", "Signer TBD", "One team", "Cost later"],
       ];
   const cols = table
     ? table.columns
@@ -421,7 +423,7 @@ function GmailScreen({
       </p>
       <p>
         <span>Subject</span>
-        {artifact?.subject || `${account} / Datadog`}
+        {artifact?.subject || `${account} / follow-up`}
       </p>
       <div>{artifact?.body || "Draft parked here until you tap Send?"}</div>
     </div>
@@ -472,7 +474,7 @@ function GdocScreen({
           {forecast
             ? `${account} forecast`
             : talks
-              ? "Bits AI talk tracks"
+              ? "Talk tracks"
               : packet
                 ? packet.title
                 : onePager?.title || `${account} brief`}
@@ -520,20 +522,20 @@ function ResearchScreen({ account }: { account: string }) {
       <p className="site-time">Researching the account · not a sequence</p>
       <ul>
         <li>
-          <span>Status</span> Sev-2, 14 days ago. 47 minutes to name the failing
-          service. Postmortem still says they jumped three tools.
+          <span>Careers</span> Category insights role posted this month. Asks
+          for someone who can rebuild the quarterly comparison.
         </li>
         <li>
-          <span>Careers</span> Staff SRE JD: experience stitching APM and logs
-          across teams. Posted this month.
+          <span>Note</span> Annual note says the store set grew. No named
+          replacement for the review process.
         </li>
         <li>
-          <span>Blog</span> We outgrew homegrown dashboards. No named
-          replacement.
+          <span>Page</span> Category page still points at last year&apos;s
+          review format.
         </li>
         <li>
-          <span>Org</span> VP Eng owns time-to-fix. Platform director sits on
-          that stitch.
+          <span>Org</span> Category lead owns the review. Ops partner lives
+          in the spreadsheet stitch.
         </li>
       </ul>
     </div>

@@ -1,10 +1,12 @@
-# Grok Bot for Datadog GTM
+# NielsenIQ x SpaceXAI
 
-Passworded site. Grok Bot from SpaceXAI, for Datadog GTM.
+Passworded site. Grok Bot from SpaceXAI, for NielsenIQ sellers.
 
 ## What it is
 
-Three GTM jobs on one page. Each job has a short problem statement, an interactive Grok Bot demo, and the matching Krista Letz clips under that demo. Below that: a light index of the clips and the public Grok Bot quote wall.
+Three sample GTM jobs on one page. Each job has a short problem statement, a scene-in-time storyboard, a final artifact, and an interactive Grok Bot demo with chat on the left and the agent computer on the right.
+
+Sample data is generic. It does not claim NielsenIQ account facts.
 
 ## Run locally
 
@@ -16,16 +18,10 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Default password is `land2expand` (override with `SITE_PASSWORD`).
 
-## Krista clips
+## Clips
 
-Download into `private/media/krista-clips/` from the GitHub release (served only through the passworded `/api/media/...` route):
-
-```bash
-gh release download krista-gtm-clips-720p-2026-08-26 \
-  --repo Speediing/grok-bot-quotes \
-  --dir private/media/krista-clips
-```
+Optional demo clips live under `private/media/` and are served only through the passworded `/api/media/...` route.
 
 ## Deploy
 
-Preview only under the `jasonwiker` Vercel team, project name `datadog-cro`. Set `SITE_PASSWORD=land2expand`. Do not promote to a public production domain until Jason says so.
+Preview only. Project slug `nielseniq`. Set `SITE_PASSWORD=land2expand`.

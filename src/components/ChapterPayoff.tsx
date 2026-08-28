@@ -33,18 +33,12 @@ function OutboundPack({
           <article className="out-email-card">
             <p className="out-email-label">Draft email · 1 of 10</p>
             <p className="out-email-subject">
-              Subject · {artifact.account}&apos;s last Sev-2
+              Subject · {artifact.page.headline}
             </p>
             <div className="out-email-copy">
               <p>Hi {firstName},</p>
-              <p>
-                Your status page and open Staff SRE role point to the same
-                thing: on-call still stitches APM and logs to name a Sev-2.
-              </p>
-              <p>
-                I put together the 90-second version for your platform team.
-                Worth fifteen minutes next week?
-              </p>
+              <p>{artifact.hypothesis[0]?.body}</p>
+              <p>{artifact.page.body}</p>
               <p>Sam</p>
             </div>
             <footer>
@@ -156,10 +150,10 @@ function BetterAnswer({
           <p className="leave-kicker">Say this</p>
           <p className="leave-win">{artifact.betterAnswer}</p>
           <p className="leave-incident" aria-hidden>
-            <span>Prometheus</span>
-            <span>Grafana</span>
-            <span>Log pile</span>
-            <b>APM + Logs</b>
+            <span>Spreadsheet</span>
+            <span>Last cycle</span>
+            <span>Three files</span>
+            <b>One comparison</b>
           </p>
         </section>
       </div>
@@ -214,7 +208,6 @@ function RedlinePack({
 
 export function ChapterPayoff({
   beat,
-  wash,
   value,
 }: {
   beat: StoryBeat;
@@ -226,7 +219,7 @@ export function ChapterPayoff({
 
   let body = null;
   if (slides?.length) {
-    body = <HeardSlide slides={slides} size="lg" wash={wash} />;
+    body = <HeardSlide slides={slides} size="lg" />;
   } else if (artifact?.kind === "redlines") {
     body = <RedlinePack artifact={artifact} />;
   } else if (artifact?.kind === "outbound") {

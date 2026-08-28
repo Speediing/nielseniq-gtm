@@ -8,9 +8,9 @@ export function BrandLockup({
     <div className={`brand-lockup brand-lockup-${size}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/brand/datadog-wordmark.svg"
-        alt="Datadog"
-        className="brand-dd"
+        src="https://cdarnavigator1.nielseniq.com/static/media/niq_logo.04cc6aace2177cbe684fc6f8453440a1.svg"
+        alt="NielsenIQ"
+        className="brand-niq"
       />
       <span className="brand-times" aria-hidden>
         ×
